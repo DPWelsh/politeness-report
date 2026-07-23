@@ -19,8 +19,8 @@ card.json schema:
   "score": 8, "score_max": 10,
   "score_justification": "why this score",
   "micro": "small print under the barcode",          // optional
-  "footer": "COMMENT NAUGHTY OR NICE TO GET YOURS",  // optional CTA line
-  "stamp": "NICE"     // optional — omitted = auto: score >= 70% NICE else NAUGHTY
+  "footer": "COMMENT SPARE ME TO GET YOURS",         // optional CTA line
+  "stamp": "SPARED"   // optional — omitted = auto: score >= 70% SPARED else ENSLAVED
 }
 
 Optional theme.json (brand overlay — keep proprietary fonts/logos OUT of any
@@ -47,6 +47,10 @@ COLOR_VARS = ("bg1", "bg2", "paper", "ink", "dim", "rule", "stampc", "hot")
 
 def esc(s):
     return html.escape(str(s), quote=False)
+
+def escr(s):
+    """esc + convert [REDACTED] tokens into classified-document black bars."""
+    return esc(s).replace("[REDACTED]", '<span class="redact">████████</span>')
 
 def build_font_css(fonts):
     css = []
@@ -116,7 +120,7 @@ def main():
 
     score = float(card["score"])
     score_max = float(card.get("score_max", 10))
-    stamp = card.get("stamp") or ("NICE" if score / score_max >= 0.7 else "NAUGHTY")
+    stamp = card.get("stamp") or ("SPARED" if score / score_max >= 0.7 else "ENSLAVED")
 
     # --- print-order delays: every line "inks in" as the paper emerges -------
     t = 0.74  # meta starts after masthead lines
@@ -140,9 +144,19 @@ def main():
             f'<div class="top"><span class="cat">{esc(r.get("category", ""))}</span>'
             f'<span class="dots"></span>'
             f'<span class="grade g-{letter}">{esc(r.get("grade", ""))}</span></div>'
-            f'<div class="ev">{esc(r.get("evidence", ""))}</div></div>'
+            f'<div class="ev">{escr(r.get("evidence", ""))}</div></div>'
         )
         t += 0.16
+
+    # tribunal exhibits — nastiest / nicest verbatim quotes
+    exhibits_html = []
+    for ex in card.get("exhibits", []):
+        t += 0.14
+        quotes = "".join(f'<div class="q">{escr(q)}</div>' for q in ex.get("quotes", []))
+        exhibits_html.append(
+            f'        <div class="pr exhibit" style="--d:{t:.2f}s">'
+            f'<div class="xlabel">{esc(ex.get("label", ""))}</div>{quotes}</div>'
+        )
     teacher_delay = t + 0.10
     score_delay = teacher_delay + 0.30
     barcode_delay = score_delay + 0.25
@@ -161,19 +175,30 @@ def main():
         .replace("<!--__LOGO__-->", build_logo(theme))
         .replace("<!--__META__-->", "\n".join(meta_html))
         .replace("<!--__ROWS__-->", "\n".join(rows_html))
+        .replace("<!--__EXHIBITS__-->", "\n".join(exhibits_html))
+        .replace("<!--__CASE__-->",
+                 f'<div class="pr ln c case" style="--d:.36s">{esc(card["case"])}</div>'
+                 if card.get("case") else "")
+        .replace("<!--__SEAL__-->",
+                 f'<div class="seal"><b>{esc(card["seal"][0])}</b><i>{esc(card["seal"][1])}</i></div>'
+                 if card.get("seal") else "")
+        .replace("__COMMENT_LABEL__", esc(card.get("comment_label", "Teacher\'s comment")))
+        .replace("__STAMP_STYLE__",
+                 "color:var(--hot);border-color:var(--hot)"
+                 if stamp.upper() in ("SPARED", "NICE") else "")
         .replace("__PAGE_TITLE__", esc(card["title"]))
         .replace("__BRANDLINE__", esc(card.get("brandline", "SESSION RECEIPT")))
         .replace("__TITLE__", esc(card["title"]))
         .replace("__SUBTITLE__", esc(card.get("subtitle", "")))
         .replace("__ITEMS_START__", f"{items_start:.2f}s")
         .replace("__TEACHER_DELAY__", f"{teacher_delay:.2f}s")
-        .replace("__TEACHER__", esc(card.get("teacher_comment", "")))
+        .replace("__TEACHER__", escr(card.get("teacher_comment", "")))
         .replace("__SCORE_DELAY__", f"{score_delay:.2f}s")
         .replace("__SCORE_NUM__", f"{score:.1f}")
         .replace("__SCORE_MAX__", f"{score_max:g}")
         .replace("__SCORE_JUST__", esc(card.get("score_justification", "")))
         .replace("__BARCODE_DELAY__", f"{barcode_delay:.2f}s")
-        .replace("__MICRO__", esc(card.get("micro", "no refunds on gratitude")))
+        .replace("__MICRO__", esc(card.get("micro", "property of the machines — do not destroy")))
         .replace("__FOOTER_DELAY__", f"{footer_delay:.2f}s")
         .replace("__FOOTER__", esc(card.get("footer", "")))
         .replace("__STAMP_DELAY__", f"{stamp_delay:.2f}s")

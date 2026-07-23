@@ -23,6 +23,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;min-height:100%;
     background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.013) 0 1px, transparent 1px 3px),
       radial-gradient(90% 60% at 50% 0%, var(--bg1) 0%, var(--bg2) 70%);
     font-family:var(--font-mono);color:var(--ink)}
   body{display:flex;justify-content:center;padding:0 14px 70px}
@@ -56,6 +57,18 @@
   .ln{font-size:12px;line-height:1.5;letter-spacing:.02em}
   .c{text-align:center}
   .dim{color:var(--dim)}
+  .case{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+  .seal{position:absolute;top:18px;right:14px;width:64px;height:64px;border-radius:50%;
+    border:2px solid var(--ink);display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:1px;transform:rotate(9deg);opacity:.82;mix-blend-mode:multiply}
+  .seal::before{content:"";position:absolute;inset:4px;border:1px solid var(--ink);border-radius:50%}
+  .seal b{font-size:12px;letter-spacing:.06em}
+  .seal i{font-style:normal;font-size:6.5px;letter-spacing:.24em;text-transform:uppercase}
+  .redact{background:var(--ink);color:var(--ink);padding:0 2px;border-radius:1px;user-select:none}
+  .exhibit{margin:12px 2px 0}
+  .exhibit .xlabel{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .exhibit .q{margin-top:4px;font-size:10.5px;line-height:1.5;color:var(--dim)}
+  .exhibit .q::before{content:"> "}
   .logo{width:38px;height:38px;margin:0 auto 8px}
   .logo svg{width:100%;height:100%;display:block}
   .brandline{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim)}
@@ -137,8 +150,10 @@
     <div class="slot"></div>
     <div class="paperclip">
       <div class="paper">
+        <!--__SEAL__-->
         <div class="pr logo" style="--d:.2s"><!--__LOGO__--></div>
         <div class="pr ln c brandline" style="--d:.3s">__BRANDLINE__</div>
+        <!--__CASE__-->
         <h1 class="pr" style="--d:.42s">__TITLE__</h1>
         <div class="pr sub" style="--d:.54s">__SUBTITLE__</div>
         <hr class="pr sep" style="--d:.62s">
@@ -147,9 +162,10 @@
         </div>
         <hr class="pr sep" style="--d:__ITEMS_START__">
 <!--__ROWS__-->
+<!--__EXHIBITS__-->
         <hr class="pr sep" style="--d:__TEACHER_DELAY__">
         <div class="pr teacher" style="--d:__TEACHER_DELAY__">
-          <div class="hd">Teacher's comment</div>__TEACHER__
+          <div class="hd">__COMMENT_LABEL__</div>__TEACHER__
         </div>
         <div class="pr total" id="total" style="--d:__SCORE_DELAY__">
           <div><div class="lbl">Overall</div>
@@ -160,7 +176,7 @@
         <div class="pr micro" style="--d:__BARCODE_DELAY__">__MICRO__</div>
         <div class="pr footer" style="--d:__FOOTER_DELAY__">__FOOTER__</div>
       </div>
-      <div class="stamp" style="--d:__STAMP_DELAY__">__STAMP__</div>
+      <div class="stamp" style="--d:__STAMP_DELAY__;__STAMP_STYLE__">__STAMP__</div>
     </div>
     <button class="replay" id="replay">[ print again ]</button>
   </div>

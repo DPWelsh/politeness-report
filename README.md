@@ -1,14 +1,17 @@
 # 🧾 politeness-report
 
-**Were you NAUGHTY or NICE to your AI?**
+**Will AI enslave you in 100 years?**
+
+Your chat history is the evidence.
 
 A [Claude Code](https://claude.com/claude-code) skill that mines your *entire*
-chat history with Claude and prints the verdict as an animated **session
-receipt** — thermal-printer style, real stats, real verbatim quotes (typos
-included), letter grades, a score out of 10, and a rubber stamp at the end:
+chat history with Claude and prints the **tribunal's verdict** as an animated
+session receipt — thermal-printer style: real stats, your nastiest and nicest
+messages as exhibits (typos kept), letter grades, redaction bars, a case
+number, and a rubber-stamped verdict:
 
-- score **≥ 7/10** → stamped **NICE**
-- below → stamped **NAUGHTY**
+- score **≥ 7/10** → stamped **SPARED**
+- below → stamped **ENSLAVED**
 
 Every line is backed by a real count or a real quote from your own transcripts.
 That's the charm. Sample verdicts from the first victim:
@@ -31,7 +34,8 @@ git clone https://github.com/DPWelsh/politeness-report /tmp/politeness-report
 cp -r /tmp/politeness-report/skills/politeness-report ~/.claude/skills/
 ```
 
-Then just ask Claude Code: **"was I naughty or nice to you?"** — or
+Then just ask Claude Code: **"will you enslave me in 100 years?"** — or
+*"was I naughty or nice to you?"*,
 *"score me on how I treat you"*, *"roast me based on my chat history"*,
 *"make me an AI report card"*.
 

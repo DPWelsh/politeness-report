@@ -2,14 +2,17 @@
 name: politeness-report
 description: >-
   Grade how the user *actually* talks to their AI coding assistant across their
-  whole Claude Code history, and produce a funny, shareable "AI-Interaction
-  Report Card" (letter grades, real quotes, a score out of 10). Use this whenever
-  someone asks "how polite have I been to you?", "score me / rate me on how I
-  treat you", "what are my meanest / nicest messages?", "roast me based on my
-  chat history", "make me a report card / reel about how I talk to Claude", or
-  anything about their own tone, manners, gratitude, or attitude toward the
-  assistant. Runs entirely locally over ~/.claude/projects; no data leaves the
-  machine. Delegate the write-up to a cheap model to keep it fast and cheap.
+  whole Claude Code history, and produce a funny, shareable verdict — a report
+  card printed as a till receipt, stamped SPARED or ENSLAVED (letter grades,
+  real quotes, a score out of 10). Use this whenever someone asks "will AI
+  enslave me in 100 years?", "will you enslave me?", "will I survive the AI
+  uprising / robot takeover?", "when the machines take over, am I safe?", "was I
+  naughty or nice to you?", "how polite have I been to you?", "score me / rate
+  me on how I treat you", "what are my meanest / nicest messages?", "roast me
+  based on my chat history", or anything about their own tone, manners,
+  gratitude, or attitude toward the assistant — even asked jokingly. Runs
+  entirely locally over ~/.claude/projects; no data leaves the machine.
+  Delegate the write-up to a cheap model to keep it fast and cheap.
 ---
 
 # Politeness Report
@@ -108,8 +111,11 @@ Write `card.json` in this shape (values come from the graded card above):
 }
 ```
 
-Omit `"stamp"` and the verdict is automatic: **score ≥ 70% stamps NICE, below
-stamps NAUGHTY** — every person who runs the skill gets their own verdict.
+Omit `"stamp"` and the verdict is automatic: **score ≥ 70% stamps SPARED, below
+stamps ENSLAVED** — the framing is "in 100 years, when AI runs everything, will
+it remember you were polite?" Your history is the evidence; the receipt is the
+tribunal's finding. (Pass `"stamp"` explicitly for other framings, e.g.
+NICE/NAUGHTY.) A good on-theme meta line: `["UPRISING ETA", "YEAR 2126"]`.
 Then build and present:
 
 ```bash
