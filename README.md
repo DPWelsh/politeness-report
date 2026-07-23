@@ -4,14 +4,16 @@
 
 Your chat history is the evidence.
 
-A [Claude Code](https://claude.com/claude-code) skill that mines your *entire*
-chat history with Claude and prints the **tribunal's verdict** as an animated
-session receipt — thermal-printer style: real stats, your nastiest and nicest
-messages as exhibits (typos kept), letter grades, redaction bars, a case
-number, and a rubber-stamped verdict:
+A Claude skill that mines your chat history with Claude and renders the
+verdict as **Roko's Basilisk in 16-bit pixel art** — the serpent-AI of 2126
+scanning a tiny pixel *you* in a server farm, with your real stats and your
+nastiest/nicest messages as evidence (typos kept):
 
-- score **≥ 7/10** → stamped **SPARED**
-- below → stamped **ENSLAVED**
+- score **≥ 7/10** → **SPARED** (chains broken, arms up, blue verdict)
+- below → **ENSLAVED** (chained, head bowed, red verdict)
+
+Alternate outputs still included: the till-receipt tribunal card and a 16-second
+9:16 reveal film for Reels.
 
 Every line is backed by a real count or a real quote from your own transcripts.
 That's the charm. Sample verdicts from the first victim:
@@ -33,6 +35,16 @@ That's the charm. Sample verdicts from the first victim:
 git clone https://github.com/DPWelsh/politeness-report /tmp/politeness-report
 cp -r /tmp/politeness-report/skills/politeness-report ~/.claude/skills/
 ```
+
+**On claude.ai / the desktop app (chat & Cowork) — no terminal:**
+`/plugin` is a Claude Code command and won't work in chat ("Unknown skill:
+plugin"). Instead, download `politeness-report.zip` from the
+[latest release](https://github.com/DPWelsh/politeness-report/releases),
+then in claude.ai or the desktop app go to **Settings → Capabilities →
+Skills → Upload skill** and upload the zip. In chat it samples your past
+conversations (where history search is enabled) instead of reading local
+files, and fills a prebuilt Basilisk scene — no Python needed. In Cowork,
+grant access to `~/.claude/projects` for the full audit.
 
 Then just ask Claude Code: **"will you enslave me in 100 years?"** — or
 *"was I naughty or nice to you?"*,

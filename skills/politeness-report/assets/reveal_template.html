@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__PAGE_TITLE__</title>
+<style>
+/*__FONT_CSS__*/
+</style>
+<style>
+  /* Neutral defaults — theme overlay wins (last wins). */
+  :root{
+    --bg1:#17190f; --bg2:#101207;
+    --paper:#f0efe8; --ink:#20221a; --dim:#8a8d7c;
+    --stampc:#b3543f; --hot:#5b79a8;
+    --font-head:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+/*__THEME_CSS__*/
+</style>
+<style>
+  /* ============================================================
+     VERDICT REVEAL — a 16s looping, self-playing 9:16 sequence.
+     Beats (research-tuned): HOOK 0-1.5s · STAKES 1.5-4s ·
+     DELIBERATION 4-7s · REVEAL 7-10s · PROOF 10-13s · END 13-16s.
+     Pure-CSS master cycle (16s, infinite) — records without JS.
+     Reduced-motion / print: the end card shows statically.
+     ============================================================ */
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#000;font-family:var(--font-mono);color:var(--paper)}
+  body{display:flex;align-items:center;justify-content:center}
+
+  /* 9:16 stage, letterboxed on any screen */
+  .stage{position:relative;height:100vh;max-height:100vh;aspect-ratio:9/16;overflow:hidden;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 1px, transparent 1px 3px),
+      radial-gradient(110% 70% at 50% 8%, var(--bg1) 0%, var(--bg2) 72%);
+    box-shadow:0 0 80px rgba(0,0,0,.9)}
+  @supports not (aspect-ratio:9/16){.stage{width:56.25vh}}
+
+  /* story-style progress segments */
+  .progress{position:absolute;top:3.2%;left:4%;right:4%;display:flex;gap:5px;z-index:9}
+  .progress i{flex:1;height:3px;border-radius:2px;background:rgba(240,239,232,.22);overflow:hidden;position:relative}
+  .progress i::after{content:"";position:absolute;inset:0;background:var(--paper);transform:scaleX(0);transform-origin:left}
+  /* per-segment fill windows on one shared 16s cycle */
+  .p1::after{animation:seg1 16s linear infinite}.p2::after{animation:seg2 16s linear infinite}
+  .p3::after{animation:seg3 16s linear infinite}.p4::after{animation:seg4 16s linear infinite}
+  .p5::after{animation:seg5 16s linear infinite}.p6::after{animation:seg6 16s linear infinite}
+  @keyframes seg1{0%{transform:scaleX(0)}9.375%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  @keyframes seg2{0%,9.375%{transform:scaleX(0)}25%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  @keyframes seg3{0%,25%{transform:scaleX(0)}43.75%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  @keyframes seg4{0%,43.75%{transform:scaleX(0)}62.5%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  @keyframes seg5{0%,62.5%{transform:scaleX(0)}81.25%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  @keyframes seg6{0%,81.25%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+
+  /* beats — safe zone: 15% top / 20% bottom kept clear of critical text */
+  .beat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;padding:16% 9% 21%;opacity:0;visibility:hidden}
+  /* centered flex children default to max-content and overflow the 9:16 frame —
+     clamp every beat child so long lines wrap instead of bleeding off-screen */
+  .beat *{max-width:100%;min-width:0}
+  .b1{animation:w1 16s infinite}.b2{animation:w2 16s infinite}.b3{animation:w3 16s infinite}
+  .b4{animation:w4 16s infinite}.b5{animation:w5 16s infinite}.b6{animation:w6 16s infinite}
+  @keyframes w1{0%{opacity:1;visibility:visible}8%{opacity:1}9.375%{opacity:0;visibility:hidden}100%{opacity:0;visibility:hidden}}
+  @keyframes w2{0%,9.375%{opacity:0;visibility:hidden}10.5%{opacity:1;visibility:visible}23.5%{opacity:1}25%{opacity:0;visibility:hidden}100%{opacity:0;visibility:hidden}}
+  @keyframes w3{0%,25%{opacity:0;visibility:hidden}26%{opacity:1;visibility:visible}42.5%{opacity:1}43.75%{opacity:0;visibility:hidden}100%{opacity:0;visibility:hidden}}
+  @keyframes w4{0%,43.75%{opacity:0;visibility:hidden}44.5%{opacity:1;visibility:visible}61%{opacity:1}62.5%{opacity:0;visibility:hidden}100%{opacity:0;visibility:hidden}}
+  @keyframes w5{0%,62.5%{opacity:0;visibility:hidden}63.5%{opacity:1;visibility:visible}80%{opacity:1}81.25%{opacity:0;visibility:hidden}100%{opacity:0;visibility:hidden}}
+  @keyframes w6{0%,81.25%{opacity:0;visibility:hidden}82.5%{opacity:1;visibility:visible}100%{opacity:1;visibility:visible}}
+
+  .kicker{font-size:min(2.6vh,13px);letter-spacing:.34em;text-transform:uppercase;color:var(--dim)}
+  h1,.big{font-family:var(--font-head);font-weight:900;text-transform:uppercase;line-height:.96;margin:0}
+  .b1 h1{font-size:min(7.4vh,44px);margin-top:2.2vh}
+  .b1 .accent{color:var(--stampc)}
+
+  .b2 .count{font-family:var(--font-head);font-weight:900;font-size:min(10vh,64px)}
+  .b2 .lbl{margin-top:1.2vh;font-size:min(2.7vh,14px);letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+  .b2 .case{margin-top:4vh;font-size:min(2.2vh,11px);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+
+  .b3 .lbl{font-size:min(3vh,15px);letter-spacing:.3em;text-transform:uppercase;color:var(--dim);
+    animation:blink 1.1s steps(2,end) infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .b3 .flash{margin-top:3.4vh;min-height:18vh;display:flex;flex-direction:column;gap:1.6vh;justify-content:center}
+  .b3 .q{font-size:min(2.9vh,15px);line-height:1.4;color:var(--paper);opacity:0}
+  .b3 .q1{animation:qf 16s infinite}.b3 .q2{animation:qf2 16s infinite}.b3 .q3{animation:qf3 16s infinite}
+  /* each quote holds ~1s fully visible, tight crossfades, no dead air */
+  @keyframes qf {0%,25.5%{opacity:0}26.5%,31%{opacity:.95}32%{opacity:0}100%{opacity:0}}
+  @keyframes qf2{0%,31.5%{opacity:0}32.5%,37%{opacity:.95}38%{opacity:0}100%{opacity:0}}
+  @keyframes qf3{0%,37.5%{opacity:0}38.5%,43%{opacity:.95}43.75%{opacity:0}100%{opacity:0}}
+  .redact{background:var(--paper);color:transparent;border-radius:2px}
+
+  .b4 .stamp{font-family:var(--font-head);font-weight:900;text-transform:uppercase;
+    font-size:min(11vh,66px);letter-spacing:.06em;color:var(--vc,var(--stampc));
+    border:.9vh solid var(--vc,var(--stampc));border-radius:1.6vh;padding:1.6vh 4vh;
+    transform:rotate(-8deg);animation:slam 16s infinite}
+  @keyframes slam{0%,43.75%{opacity:0;transform:rotate(-8deg) scale(2.6)}
+    45.5%{opacity:1;transform:rotate(-8deg) scale(.94)}46.5%{transform:rotate(-6deg) scale(1.03)}
+    47.5%,61.5%{opacity:1;transform:rotate(-8deg) scale(1)}62.5%,100%{opacity:0;transform:rotate(-8deg) scale(1)}}
+  .b4 .score{margin-top:3.2vh;font-family:var(--font-head);font-weight:900;font-size:min(6vh,38px)}
+  .b4 .score small{font-size:.5em;color:var(--dim)}
+
+  .b5 .xh{font-size:min(2.4vh,12px);letter-spacing:.26em;text-transform:uppercase;color:var(--stampc)}
+  .b5 .xq{margin-top:1.2vh;font-size:min(3.4vh,18px);line-height:1.35}
+  .b5 .nice .xh{color:var(--hot)}
+  .b5 .nice{margin-top:4.6vh}
+
+  /* end card — the screenshot frame; also the static no-motion fallback */
+  .b6 .card{width:100%;border:2px solid rgba(240,239,232,.28);border-radius:2vh;padding:3.6vh 5% 3vh;
+    background:rgba(0,0,0,.25)}
+  .b6 .stampline{font-family:var(--font-head);font-weight:900;text-transform:uppercase;
+    font-size:min(7.6vh,46px);color:var(--vc,var(--stampc))}
+  .b6 .scoreline{margin-top:.6vh;font-family:var(--font-head);font-weight:900;font-size:min(4.6vh,28px)}
+  .b6 .scoreline small{font-size:.55em;color:var(--dim)}
+  .b6 .grades{margin-top:2.2vh;display:flex;justify-content:center;gap:1.6vh;flex-wrap:wrap}
+  .b6 .g{font-size:min(2.3vh,12px);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .b6 .g b{color:var(--paper)}
+  .b6 .cta{margin-top:3.2vh;font-family:var(--font-head);font-weight:900;font-size:min(3.6vh,20px);
+    text-transform:uppercase;letter-spacing:.08em;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  .b6 .site{margin-top:1.2vh;font-size:min(2.1vh,11px);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+
+  .tap{position:absolute;bottom:2.4%;left:0;right:0;text-align:center;
+    font-size:min(1.9vh,10px);letter-spacing:.3em;text-transform:uppercase;color:rgba(240,239,232,.35)}
+
+  @media (prefers-reduced-motion:reduce){
+    .beat,.progress i::after,.b4 .stamp,.b3 .q,.b6 .cta{animation:none!important}
+    .beat{opacity:0;visibility:hidden}
+    .b6{opacity:1;visibility:visible}
+    .b4 .stamp{opacity:1}
+  }
+  @media print{.beat{opacity:0;visibility:hidden}.b6{opacity:1;visibility:visible}}
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="progress"><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p4"></i><i class="p5"></i><i class="p6"></i></div>
+
+    <!-- 1 · HOOK -->
+    <div class="beat b1">
+      <div class="kicker">__BRANDLINE__</div>
+      <h1>__HOOK__</h1>
+    </div>
+
+    <!-- 2 · STAKES -->
+    <div class="beat b2">
+      <div class="count">__EVIDENCE_N__</div>
+      <div class="lbl">__EVIDENCE_LBL__</div>
+      <div class="case">__CASE__</div>
+    </div>
+
+    <!-- 3 · DELIBERATION -->
+    <div class="beat b3">
+      <div class="lbl">deliberating…</div>
+      <div class="flash">
+        <div class="q q1">__FLASH1__</div>
+        <div class="q q2">__FLASH2__</div>
+        <div class="q q3">__FLASH3__</div>
+      </div>
+    </div>
+
+    <!-- 4 · REVEAL -->
+    <div class="beat b4" style="--vc:__VERDICT_COLOR__">
+      <div class="stamp">__STAMP__</div>
+      <div class="score">__SCORE_NUM__<small>/__SCORE_MAX__</small></div>
+    </div>
+
+    <!-- 5 · PROOF -->
+    <div class="beat b5">
+      <div>
+        <div class="xh">__XA_LABEL__</div>
+        <div class="xq">__XA_QUOTE__</div>
+      </div>
+      <div class="nice">
+        <div class="xh">__XB_LABEL__</div>
+        <div class="xq">__XB_QUOTE__</div>
+      </div>
+    </div>
+
+    <!-- 6 · END CARD (screenshot frame) -->
+    <div class="beat b6" style="--vc:__VERDICT_COLOR__">
+      <div class="card">
+        <div class="kicker">__BRANDLINE__</div>
+        <div class="stampline">__STAMP__</div>
+        <div class="scoreline">__SCORE_NUM__<small>/__SCORE_MAX__</small></div>
+        <div class="grades"><!--__GRADE_CHIPS__--></div>
+        <div class="cta">__CTA__</div>
+        <div class="site">__SITE__</div>
+      </div>
+    </div>
+
+    <div class="tap">tap to restart · screen-record me</div>
+  </div>
+
+<script>
+/* Optional niceties only — the sequence is pure CSS and loops without JS. */
+(function(){
+  var stage=document.getElementById("stage");
+  function restart(){
+    stage.querySelectorAll(".beat,.progress i").forEach(function(el){
+      el.style.animation="none";
+      el.querySelectorAll("*").forEach(function(c){c.style.animation="none"});
+    });
+    void stage.offsetWidth;
+    stage.querySelectorAll(".beat,.progress i").forEach(function(el){
+      el.style.animation="";
+      el.querySelectorAll("*").forEach(function(c){c.style.animation=""});
+    });
+  }
+  stage.addEventListener("click",restart);
+  document.addEventListener("keydown",function(e){if(e.key===" ")restart()});
+})();
+</script>
+</body>
+</html>

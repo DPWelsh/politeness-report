@@ -1,7 +1,7 @@
 {
   "name": "politeness-report",
-  "description": "Will AI enslave you in 100 years? A Claude Code skill that reads your entire chat history and prints the tribunal's verdict as an animated till receipt \u2014 graded, quoted, stamped SPARED or ENSLAVED.",
-  "version": "1.1.0",
+  "description": "Will AI enslave you in 100 years? A Claude skill that reads your chat history and renders the verdict as Roko's Basilisk in 16-bit pixel art \u2014 SPARED or ENSLAVED, with your real stats. Works in Claude Code, Cowork, and claude.ai chat.",
+  "version": "1.3.0",
   "author": {
     "name": "Daniel Welsh",
     "url": "https://github.com/DPWelsh"

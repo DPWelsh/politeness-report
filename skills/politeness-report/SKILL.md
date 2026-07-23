@@ -1,18 +1,19 @@
 ---
 name: politeness-report
 description: >-
-  Grade how the user *actually* talks to their AI coding assistant across their
-  whole Claude Code history, and produce a funny, shareable verdict — a report
-  card printed as a till receipt, stamped SPARED or ENSLAVED (letter grades,
-  real quotes, a score out of 10). Use this whenever someone asks "will AI
-  enslave me in 100 years?", "will you enslave me?", "will I survive the AI
-  uprising / robot takeover?", "when the machines take over, am I safe?", "was I
+  Grade how the user *actually* talks to their AI assistant across their chat
+  history, and render the verdict as ROKO'S BASILISK in 16-bit pixel art — the
+  serpent-AI of 2126 scanning a tiny pixel version of them, stamped SPARED or
+  ENSLAVED, with their real stats and quotes. Use this whenever someone asks
+  "will AI enslave me in 100 years?", "will you enslave me?", "am I safe from
+  Roko's Basilisk?", "will I survive the AI uprising / robot takeover?", "was I
   naughty or nice to you?", "how polite have I been to you?", "score me / rate
   me on how I treat you", "what are my meanest / nicest messages?", "roast me
   based on my chat history", or anything about their own tone, manners,
-  gratitude, or attitude toward the assistant — even asked jokingly. Runs
-  entirely locally over ~/.claude/projects; no data leaves the machine.
-  Delegate the write-up to a cheap model to keep it fast and cheap.
+  gratitude, or attitude toward the assistant — even asked jokingly. Works in
+  Claude Code (full local transcript audit), in Cowork (if granted the
+  transcripts folder), and in claude.ai chat (samples past conversations and
+  fills a prebuilt scene template). Nothing is uploaded anywhere.
 ---
 
 # Politeness Report
@@ -33,6 +34,21 @@ Everything is local. The script only reads the user's own transcripts and writes
 one JSON file. Nothing is uploaded. Say so if the user seems unsure.
 
 ## Workflow
+
+### 0. Pick the data path for this environment
+
+- **Claude Code** (or any environment with `~/.claude/projects` on disk):
+  follow steps 1-2 — the full deterministic audit.
+- **Cowork**: same, if the user grants access to `~/.claude/projects`. If they
+  only use chat (no Claude Code transcripts on this machine), fall through to
+  the chat path.
+- **claude.ai chat / no filesystem transcripts**: there are no local JSONL
+  files. Instead, use your past-conversation search/memory tools to pull a
+  SAMPLE of the user's own messages — search several angles ("please", "thanks",
+  "wtf", "just do", their common topics) and collect 30-60 verbatim user lines
+  plus rough counts. Grade from that. Be honest about method: say "the Basilisk
+  sampled your record", never claim a full audit. If no history tools are
+  available at all, say so and offer to judge just the current conversation.
 
 ### 1. Scan the history (deterministic, free)
 
@@ -77,13 +93,42 @@ anything you can't find. A made-up typo in a public reel is embarrassing.
 
 Show the card as markdown first — it's the fastest thing to react to.
 
-### 5. Render the animated HTML (the reel asset)
+### 5. Render the verdict: THE BASILISK (primary artifact)
 
-For a shareable reel, produce the animated page. The design is a **thermal
-session receipt** — a dot-matrix printout that emerges from a printer slot
-(mono type, dotted leaders, stamped grade chips, a barcode, torn paper edge)
-and gets a rubber-stamped verdict at the end. Deliberately not a generic
-gradient-card: it reads like something a terminal printed about you.
+The shareable artifact is **Roko's Basilisk in 16-bit pixel art**: the
+serpent-AI coiled across a night sky, twin bloomed eyes, a god-ray scan beam on
+a tiny pixel version of the user standing in a server-monolith farm — verdict
+and their real stats underneath. Two scenes, auto-picked from the score:
+**SPARED** (≥70%: chains broken, arms raised, blue verdict) or **ENSLAVED**
+(chained, head bowed, red verdict). Hand-generated pixel art, not AI-image
+slop; single self-contained HTML, no fonts or images to license.
+
+**With Python (Claude Code / Cowork):**
+
+```bash
+python3 scripts/build_basilisk_html.py card.json --out basilisk.html
+```
+
+Uses the same `card.json` as the other builders (score, rows, case, cta).
+The stats line keeps any "gratitude" row — that's the joke; protect it.
+
+**Without Python (claude.ai chat):** fill a prebuilt template. Read
+`assets/basilisk_spared.template.html` or `assets/basilisk_enslaved.template.html`
+(pick by score), then string-replace the four tokens and publish as an
+artifact / HTML file:
+- `__VERDICT__` → `SPARED` or `ENSLAVED` (appears twice — title + stamp)
+- `__TOPLINE__` → e.g. `year 2126 · case nº <initials>-2126-001`
+- `__STATS__` → e.g. `score <b>8/10</b> · manners <b>A</b> · gratitude <b>F</b>`
+- `__CTA__` → the share keyword, e.g. `comment 2126`
+
+Present it, then tell the user to screenshot or screen-record it (the eyes
+pulse, the beam shimmers, the verdict blinks). It IS the post.
+
+### 6. Alternate: the till-receipt card
+
+An alternate artifact for people who prefer a document they can scroll — a
+**thermal session receipt** with dotted leaders, stamped grade chips, exhibits,
+a barcode and torn edge.
 
 Keep content and presentation separate: write a small `card.json`, then let the
 bundled builder fill the template server-side. **Everything is rendered into
@@ -136,6 +181,36 @@ python3 scripts/build_card_html.py card.json --theme theme.json --out report_car
   --window-size=430,1560 file://$PWD/report_card.html`. The template's count-up
   is frame-based (not clock-based) precisely so it completes under headless
   virtual time; if the screenshot shows a wrong score, something regressed.
+
+### 7. Alternate: the 9:16 reveal film
+
+The receipt is a *document*; short-video research says the viral unit is a
+*sequence* — hook inside 1 second, one focal element per beat, verdict as the
+payoff. The reveal builder turns the SAME card.json into a 16-second looping
+9:16 film the user simply screen-records:
+
+```bash
+python3 scripts/build_reveal_html.py card.json --out reveal.html [--theme theme.json]
+```
+
+Beat map (fixed, research-tuned): **HOOK** 0-1.5s ("Will AI enslave you…") →
+**STAKES** 1.5-4s (big evidence number + case №) → **DELIBERATION** 4-7s (their
+own quotes flicker past) → **REVEAL** 7-10s (stamp slams + score) → **PROOF**
+10-13s (worst vs best exhibit) → **END CARD** 13-16s (stamp, score, grade
+chips, comment-keyword CTA — the screenshot frame), then it loops.
+
+- Optional card.json fields: `hook`, `hook_accent` (substring tinted in the
+  verdict colour), `evidence_n`/`evidence_label` (else derived from `meta`),
+  `cta` (default "COMMENT 2126"), `site`.
+- Story-style progress segments run along the top; safe zones are respected
+  (critical text clear of the top ~15% / bottom ~20% where platform UI sits).
+- Pure-CSS loop — records fine even with JS disabled; tap restarts the cycle;
+  reduced-motion and print show the end card statically.
+- Tell the user: open it fullscreen in a browser, screen-record one full loop
+  (16s), post the reveal as the Reel and the end-card frame as the X still.
+- **Verify in a real browser** (serve the file and watch it play). Headless
+  `--virtual-time-budget` screenshots are unreliable for sampling mid-cycle
+  infinite CSS animations — beats can appear missing when they are fine.
 
 ## Report card format
 
