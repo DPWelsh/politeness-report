@@ -14,7 +14,7 @@ Extra optional fields it reads:
   "hook_accent": "enslave you"                          // substring tinted
   "evidence_n":  "1,292"                                // beat-2 big number
   "evidence_label": "messages analysed",
-  "cta":         "COMMENT 2126",                        // end-card CTA
+  "cta":         "",                                   // optional end-card CTA
   "site":        "labs.routiq.ai/naughty-or-nice"       // end-card footer
 
 Pure CSS loop — records fine even with JavaScript disabled; tap restarts.
@@ -122,7 +122,7 @@ def main():
         .replace("__XB_LABEL__", esc(xb.get("label", "")))
         .replace("__XB_QUOTE__", escr((xb.get("quotes") or [""])[0]))
         .replace("<!--__GRADE_CHIPS__-->", chips)
-        .replace("__CTA__", esc(card.get("cta", "COMMENT 2126")))
+        .replace("__CTA__", esc(card.get("cta", "")))
         .replace("__SITE__", esc(card.get("site", "")))
     )
     leftovers = re.findall(r"__[A-Z_]+__", filled)

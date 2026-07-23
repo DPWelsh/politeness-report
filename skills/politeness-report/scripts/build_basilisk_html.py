@@ -268,13 +268,15 @@ def main():
     if args.tokens:
         topline = "__TOPLINE__"
         stats = "__STATS__"
-        cta = "__CTA__"
+        cta_line = "__CTA_LINE__"  # chat fills this whole line, or leaves it blank
         stamp_txt = "__VERDICT__"
     else:
         case = esc(card.get("case", ""))
         topline = f"year 2126 · {case}" if case else "year 2126"
         stats = stats_line(card)
-        cta = esc(card.get("cta", "comment 2126"))
+        # CTA is optional; empty (the default) renders no CTA line at all
+        cta = esc(card.get("cta", ""))
+        cta_line = f"continue? {cta}" if cta else ""
         stamp_txt = esc(stamp)
 
     html_doc = f"""<!doctype html>
@@ -318,7 +320,7 @@ def main():
     <div class="txt t2">{headline}</div>
     <div class="txt verdict">{stamp_txt}</div>
     <div class="txt stats">{stats}</div>
-    <div class="txt cta">continue? {cta}</div>
+    <div class="txt cta">{cta_line}</div>
   </div>
 </body></html>"""
 

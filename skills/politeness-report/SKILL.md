@@ -119,7 +119,7 @@ artifact / HTML file:
 - `__VERDICT__` → `SPARED` or `ENSLAVED` (appears twice — title + stamp)
 - `__TOPLINE__` → e.g. `year 2126 · case nº <initials>-2126-001`
 - `__STATS__` → e.g. `score <b>8/10</b> · manners <b>A</b> · gratitude <b>F</b>`
-- `__CTA__` → the share keyword, e.g. `comment 2126`
+- `__CTA_LINE__` → optional call-to-action line (e.g. a share prompt), or leave empty for none
 
 Present it, then tell the user to screenshot or screen-record it (the eyes
 pulse, the beam shimmers, the verdict blinks). It IS the post.
@@ -201,7 +201,7 @@ chips, comment-keyword CTA — the screenshot frame), then it loops.
 
 - Optional card.json fields: `hook`, `hook_accent` (substring tinted in the
   verdict colour), `evidence_n`/`evidence_label` (else derived from `meta`),
-  `cta` (default "COMMENT 2126"), `site`.
+  `cta` (optional; omit for no call-to-action line), `site`.
 - Story-style progress segments run along the top; safe zones are respected
   (critical text clear of the top ~15% / bottom ~20% where platform UI sits).
 - Pure-CSS loop — records fine even with JS disabled; tap restarts the cycle;
