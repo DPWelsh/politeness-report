@@ -24,7 +24,7 @@ That's the charm. Sample verdicts from the first victim:
 
 ## Install
 
-**As a plugin (recommended):**
+**As a plugin (recommended — run in the Claude Code CLI/terminal; `/plugin` isn't available inside the desktop app UI, but a one-time CLI install works everywhere):**
 ```
 /plugin marketplace add DPWelsh/politeness-report
 /plugin install politeness-report@politeness-report
