@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__PAGE_TITLE__</title>
+<style>
+/*__FONT_CSS__*/
+</style>
+<style>
+  /* Neutral defaults — a theme file overrides via the THEME_CSS block (last wins). */
+  :root{
+    --bg1:#17190f; --bg2:#101207;
+    --paper:#f0efe8; --ink:#20221a; --dim:#6a6c5e; --rule:#b9bab0;
+    --stampc:#b3543f; --hot:#5b79a8;
+    --font-head:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --gA:#3c6e47; --gB:#4a7d8c; --gC:#a06a1f; --gD:#8a4a2a; --gF:#8c2f2f;
+  }
+/*__THEME_CSS__*/
+</style>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;
+    background:
+      radial-gradient(90% 60% at 50% 0%, var(--bg1) 0%, var(--bg2) 70%);
+    font-family:var(--font-mono);color:var(--ink)}
+  body{display:flex;justify-content:center;padding:0 14px 70px}
+  .stage{width:100%;max-width:390px;position:relative}
+
+  /* printer slot the paper hangs from */
+  .slot{position:sticky;top:0;z-index:3;height:26px;margin:0 -8px;
+    background:linear-gradient(#2a2d20,#191b12 60%,#0d0e08);
+    border-radius:0 0 10px 10px;
+    box-shadow:0 6px 14px -4px rgba(0,0,0,.8), inset 0 -2px 0 rgba(255,255,255,.06)}
+  .slot::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:3px;
+    background:#000;border-radius:2px;box-shadow:0 1px 0 rgba(255,255,255,.07)}
+
+  .paperclip{position:relative;overflow:hidden;margin-top:-4px;padding:0 6px 26px}
+  .paper{position:relative;background:var(--paper);
+    padding:30px 20px 26px;transform:rotate(.35deg);
+    box-shadow:0 24px 50px -18px rgba(0,0,0,.75);
+    /* thermal banding + faint edge scorch */
+    background-image:
+      repeating-linear-gradient(0deg, rgba(32,34,26,.022) 0 2px, transparent 2px 5px),
+      linear-gradient(90deg, rgba(32,34,26,.05), transparent 7%, transparent 93%, rgba(32,34,26,.05));
+    /* torn bottom edge */
+    clip-path:polygon(0 0,100% 0,100% calc(100% - 9px),
+      96% 100%,92% calc(100% - 8px),88% 100%,84% calc(100% - 7px),80% 100%,
+      76% calc(100% - 9px),72% 100%,68% calc(100% - 7px),64% 100%,
+      60% calc(100% - 9px),56% 100%,52% calc(100% - 7px),48% 100%,
+      44% calc(100% - 9px),40% 100%,36% calc(100% - 8px),32% 100%,
+      28% calc(100% - 7px),24% 100%,20% calc(100% - 9px),16% 100%,
+      12% calc(100% - 8px),8% 100%,4% calc(100% - 7px),0 100%)}
+
+  .ln{font-size:12px;line-height:1.5;letter-spacing:.02em}
+  .c{text-align:center}
+  .dim{color:var(--dim)}
+  .logo{width:38px;height:38px;margin:0 auto 8px}
+  .logo svg{width:100%;height:100%;display:block}
+  .brandline{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim)}
+  h1{margin:8px 0 2px;font-family:var(--font-head);font-weight:900;font-size:30px;
+     line-height:1;letter-spacing:.02em;text-transform:uppercase;text-align:center}
+  .sub{margin:8px auto 0;max-width:300px;font-size:11px;line-height:1.55;
+       text-align:center;color:var(--dim)}
+  .sep{margin:14px 0;border:0;border-top:1.5px dashed var(--rule);position:relative}
+
+  .meta{margin:0 2px}
+  .meta .ln{display:flex;gap:8px}
+  .meta .k{white-space:nowrap;text-transform:uppercase;letter-spacing:.06em}
+  .meta .dots{flex:1;border-bottom:2px dotted var(--rule);transform:translateY(-4px)}
+  .meta .v{white-space:nowrap;font-weight:700}
+
+  .item{margin:11px 2px 0}
+  .item .top{display:flex;align-items:baseline;gap:8px}
+  .item .cat{text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:12.5px}
+  .item .dots{flex:1;border-bottom:2px dotted var(--rule);transform:translateY(-4px)}
+  .item .grade{font-weight:800;font-size:15px;padding:2px 7px;border-radius:3px;
+    color:var(--paper);transform:rotate(-2deg)}
+  .g-A{background:var(--gA)} .g-B{background:var(--gB)} .g-C{background:var(--gC)}
+  .g-D{background:var(--gD)} .g-F{background:var(--gF);outline:2px solid var(--gF);outline-offset:2px}
+  .item .ev{margin-top:3px;font-size:10.5px;line-height:1.5;color:var(--dim)}
+
+  .teacher{margin:14px 2px 0;font-size:11px;line-height:1.6}
+  .teacher .hd{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:10px;
+    margin-bottom:4px}
+
+  .total{margin:14px 2px 0;background:var(--ink);color:var(--paper);padding:12px 14px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .total .lbl{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase}
+  .total .big{font-family:var(--font-head);font-weight:900;font-size:30px;line-height:1}
+  .total .big small{font-size:14px;opacity:.65}
+  .total .just{font-size:9.5px;line-height:1.45;opacity:.75;max-width:150px;text-align:right}
+
+  .barcode{margin:16px auto 4px;height:40px;max-width:250px;
+    background:repeating-linear-gradient(90deg,
+      var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 7px, transparent 7px 9px,
+      var(--ink) 9px 10px, transparent 10px 14px, var(--ink) 14px 17px, transparent 17px 19px,
+      var(--ink) 19px 20px, transparent 20px 22px)}
+  .micro{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+    text-align:center;margin-top:6px}
+  .footer{margin-top:12px;font-size:10.5px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;text-align:center}
+
+  .stamp{position:absolute;right:16px;bottom:74px;z-index:2;color:var(--stampc);
+    border:3.5px solid var(--stampc);border-radius:6px;padding:8px 16px;
+    font-family:var(--font-head);font-weight:900;font-size:26px;letter-spacing:.1em;
+    text-transform:uppercase;transform:rotate(-11deg);opacity:.9;
+    mix-blend-mode:multiply;
+    -webkit-mask-image:radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.62));
+            mask-image:radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.62))}
+
+  .replay{margin:20px auto 0;display:none;background:transparent;color:#9a9d8a;
+    border:1.5px dashed #4a4d3c;font:600 11px/1 var(--font-mono);letter-spacing:.18em;
+    padding:10px 18px;cursor:pointer;text-transform:uppercase}
+  .replay:hover{color:var(--paper);border-color:#9a9d8a}
+
+  /* ==========================================================
+     PRINTING — only when JS adds .play. Without JS the receipt
+     is complete and fully visible: never a blank page.
+     ========================================================== */
+  .play .paper{animation:printout 2.3s steps(24,end) both}
+  .play .pr{animation:inkin .01s both;animation-delay:var(--d,0s)}
+  .play .stamp{animation:slam .45s cubic-bezier(.2,.9,.3,1.25) both;animation-delay:var(--d,0s)}
+  @keyframes printout{from{transform:translateY(-96%) rotate(.35deg)}to{transform:translateY(0) rotate(.35deg)}}
+  @keyframes inkin{from{opacity:0}to{opacity:1}}
+  @keyframes slam{0%{opacity:0;transform:rotate(-11deg) scale(2.6)}
+    70%{opacity:.92;transform:rotate(-11deg) scale(.9)}
+    85%{transform:rotate(-8deg) scale(1.05)}100%{opacity:.9;transform:rotate(-11deg) scale(1)}}
+  @media(prefers-reduced-motion:reduce){
+    .play .paper,.play .pr,.play .stamp{animation:none}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="slot"></div>
+    <div class="paperclip">
+      <div class="paper">
+        <div class="pr logo" style="--d:.2s"><!--__LOGO__--></div>
+        <div class="pr ln c brandline" style="--d:.3s">__BRANDLINE__</div>
+        <h1 class="pr" style="--d:.42s">__TITLE__</h1>
+        <div class="pr sub" style="--d:.54s">__SUBTITLE__</div>
+        <hr class="pr sep" style="--d:.62s">
+        <div class="meta">
+<!--__META__-->
+        </div>
+        <hr class="pr sep" style="--d:__ITEMS_START__">
+<!--__ROWS__-->
+        <hr class="pr sep" style="--d:__TEACHER_DELAY__">
+        <div class="pr teacher" style="--d:__TEACHER_DELAY__">
+          <div class="hd">Teacher's comment</div>__TEACHER__
+        </div>
+        <div class="pr total" id="total" style="--d:__SCORE_DELAY__">
+          <div><div class="lbl">Overall</div>
+            <div class="big"><span id="scoreNum">__SCORE_NUM__</span><small>/__SCORE_MAX__</small></div></div>
+          <div class="just">__SCORE_JUST__</div>
+        </div>
+        <div class="pr barcode" style="--d:__BARCODE_DELAY__"></div>
+        <div class="pr micro" style="--d:__BARCODE_DELAY__">__MICRO__</div>
+        <div class="pr footer" style="--d:__FOOTER_DELAY__">__FOOTER__</div>
+      </div>
+      <div class="stamp" style="--d:__STAMP_DELAY__">__STAMP__</div>
+    </div>
+    <button class="replay" id="replay">[ print again ]</button>
+  </div>
+
+<script>
+/* Progressive enhancement only — the receipt is complete without this script. */
+const CARD = /*__CARD_JSON__*/ null;
+(function(){
+  if (!CARD) return;
+  var stage = document.getElementById("stage"),
+      numEl = document.getElementById("scoreNum"),
+      total = document.getElementById("total"),
+      btn   = document.getElementById("replay");
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var score = Number(CARD.score || 0), gen = 0;
+  function countUp(e){
+    if (e && e.target !== total) return;      // ignore bubbled child animations
+    var frames = 60, i = 0, mine = ++gen;     // frame-based: survives frozen clocks
+    (function step(){
+      if (mine !== gen) return;
+      i++;
+      var k = Math.min(1, i/frames), ease = 1 - Math.pow(1-k, 3);
+      numEl.textContent = (score*ease).toFixed(1);
+      if (k < 1) requestAnimationFrame(step);
+      else numEl.textContent = score.toFixed(1);
+    })();
+  }
+  total.addEventListener("animationstart", countUp);
+  function play(){
+    stage.classList.remove("play");
+    void stage.offsetWidth;
+    stage.classList.add("play");
+  }
+  btn.style.display = "block";
+  btn.addEventListener("click", play);
+  play();
+})();
+</script>
+</body>
+</html>

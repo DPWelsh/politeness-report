@@ -1,0 +1,12 @@
+{
+  "name": "politeness-report",
+  "description": "Grade how you actually talk to your AI coding assistant — a funny, evidence-backed report card printed as an animated session receipt, stamped NAUGHTY or NICE.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Daniel Welsh",
+    "url": "https://github.com/DPWelsh"
+  },
+  "homepage": "https://github.com/DPWelsh/politeness-report",
+  "license": "MIT",
+  "keywords": ["claude-code", "fun", "report-card", "politeness", "naughty-or-nice"]
+}

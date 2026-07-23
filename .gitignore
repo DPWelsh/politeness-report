@@ -1,0 +1,9 @@
+.DS_Store
+*.woff2
+*.otf
+*.ttf
+theme.json
+*_theme.json
+card.json
+report_card.html
+politeness_report_data.json

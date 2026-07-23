@@ -1,0 +1,14 @@
+{
+  "name": "politeness-report",
+  "owner": {
+    "name": "Daniel Welsh",
+    "url": "https://github.com/DPWelsh"
+  },
+  "plugins": [
+    {
+      "name": "politeness-report",
+      "source": "./",
+      "description": "Grade how you actually talk to your AI coding assistant — a funny, evidence-backed report card printed as an animated session receipt, stamped NAUGHTY or NICE."
+    }
+  ]
+}
